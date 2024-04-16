@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 let mainWindow;
-let favorites = [];
+let shortcutsPopup;
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
@@ -92,6 +92,12 @@ app.on('ready', () => {
               }
             };
           })
+        },
+        {
+          label: 'Guia de Atalhos',
+          click() {
+            showShortcutsPopup();
+          }
         }
       ]
     }
@@ -134,3 +140,44 @@ function addFavorite() {
   favorites.push({ url: currentUrl, title: currentTitle });
   mainWindow.webContents.send('update-favorites', favorites);
 }
+
+function showShortcutsPopup() {
+  const shortcutsText = `
+    Atalhos do Navegador:
+    - Voltar: CmdOrCtrl+Left
+    - Avançar: CmdOrCtrl+Right
+    - Recarregar: CmdOrCtrl+R
+    - Home: CmdOrCtrl+H
+    - Limpar Cookies: CmdOrCtrl+Shift+C
+    - Ir para URL: CmdOrCtrl+U
+    - Favoritar Página: CmdOrCtrl+D
+  `;
+  
+  shortcutsPopup = new BrowserWindow({
+    parent: mainWindow,
+    width: 400,
+    height: 300,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  shortcutsPopup.loadURL(`data:text/html,
+    <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          h2 { margin-bottom: 10px; }
+          p { white-space: pre-wrap; }
+        </style>
+      </head>
+      <body>
+        <h2>Guia de Atalhos</h2>
+        <p>${shortcutsText}</p>
+      </body>
+    </html>`
+  );
+
+  shortcutsPopup.once
