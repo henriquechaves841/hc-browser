@@ -20,13 +20,13 @@
       "output": "dist"
     },
     "win": {
-      "target": "nsis"
+      "target": ["dmg", "zip"]
     },
     "mac": {
-      "target": "dmg"
+      "target": ["nsis", "zip"]
     },
     "linux": {
-      "target": "AppImage"
+      "target": ["AppImage", "deb", "rpm", "zip"]
     }
   }
 }
