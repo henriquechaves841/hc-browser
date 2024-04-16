@@ -13,7 +13,8 @@
 ### Como buildar
 
 * Vá na raiz do projeto que você baixou
-* rode o comando
+* Rode os comandos
 ```npm
+npm install electron electron-build
 npm run build
 ```
