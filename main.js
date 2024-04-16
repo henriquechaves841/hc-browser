@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, session } = require('electron');
+const { app, BrowserWindow, Menu, session, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -13,7 +13,7 @@ app.on('ready', () => {
     }
   });
 
-  const urlToMirror = 'https://duckduckgo.com';
+  const urlToMirror = 'https://example.com';
 
   mainWindow.loadURL(urlToMirror);
 
@@ -30,39 +30,51 @@ app.on('ready', () => {
 
   const menuTemplate = [
     {
-      label: 'Voltar',
-      accelerator: 'CmdOrCtrl+Left',
-      click() {
-        mainWindow.webContents.goBack();
-      }
-    },
-    {
-      label: 'Avançar',
-      accelerator: 'CmdOrCtrl+Right',
-      click() {
-        mainWindow.webContents.goForward();
-      }
-    },
-    {
-      label: 'Recarregar',
-      accelerator: 'CmdOrCtrl+R',
-      click() {
-        mainWindow.webContents.reload();
-      }
-    },
-    {
-      label: 'Home',
-      accelerator: 'CmdOrCtrl+H',
-      click() {
-        mainWindow.loadURL(urlToMirror);
-      }
-    },
-    {
-      label: 'Limpar Cookies',
-      accelerator: 'CmdOrCtrl+Shift+C',
-      click() {
-        clearCookies();
-      }
+      label: 'Ações',
+      submenu: [
+        {
+          label: 'Voltar',
+          accelerator: 'CmdOrCtrl+Left',
+          click() {
+            mainWindow.webContents.goBack();
+          }
+        },
+        {
+          label: 'Avançar',
+          accelerator: 'CmdOrCtrl+Right',
+          click() {
+            mainWindow.webContents.goForward();
+          }
+        },
+        {
+          label: 'Recarregar',
+          accelerator: 'CmdOrCtrl+R',
+          click() {
+            mainWindow.webContents.reload();
+          }
+        },
+        {
+          label: 'Home',
+          accelerator: 'CmdOrCtrl+H',
+          click() {
+            mainWindow.loadURL(urlToMirror);
+          }
+        },
+        {
+          label: 'Limpar Cookies',
+          accelerator: 'CmdOrCtrl+Shift+C',
+          click() {
+            clearCookies();
+          }
+        },
+        {
+          label: 'Ir para URL',
+          accelerator: 'CmdOrCtrl+U',
+          click() {
+            goToURL();
+          }
+        }
+      ]
     }
   ];
 
@@ -75,5 +87,24 @@ function clearCookies() {
     storages: ['cookies']
   }, () => {
     console.log('Cookies limpos!');
+  });
+}
+
+function goToURL() {
+  dialog.showMessageBox(mainWindow, {
+    title: 'Ir para URL',
+    message: 'Por favor, insira a URL desejada:',
+    inputPlaceholder: 'https://example.com',
+    type: 'question',
+    buttons: ['Cancelar', 'Ir']
+  }).then((result) => {
+    if (!result.canceled) {
+      const url = result.inputValue.trim();
+      if (url !== '') {
+        mainWindow.loadURL(url);
+      }
+    }
+  }).catch((err) => {
+    console.log(err);
   });
 }
