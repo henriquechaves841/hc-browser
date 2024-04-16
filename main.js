@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 let mainWindow;
+let favorites = [];
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
@@ -73,6 +74,24 @@ app.on('ready', () => {
           click() {
             goToURL();
           }
+        },
+        {
+          label: 'Favoritar Página',
+          accelerator: 'CmdOrCtrl+D',
+          click() {
+            addFavorite();
+          }
+        },
+        {
+          label: 'Favoritos',
+          submenu: favorites.map((favorite) => {
+            return {
+              label: favorite.title,
+              click() {
+                mainWindow.loadURL(favorite.url);
+              }
+            };
+          })
         }
       ]
     }
@@ -107,4 +126,11 @@ function goToURL() {
   }).catch((err) => {
     console.log(err);
   });
+}
+
+function addFavorite() {
+  const currentUrl = mainWindow.webContents.getURL();
+  const currentTitle = mainWindow.getTitle();
+  favorites.push({ url: currentUrl, title: currentTitle });
+  mainWindow.webContents.send('update-favorites', favorites);
 }
