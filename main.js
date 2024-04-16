@@ -69,31 +69,6 @@ app.on('ready', () => {
           }
         },
         {
-          label: 'Ir para URL',
-          accelerator: 'CmdOrCtrl+U',
-          click() {
-            goToURL();
-          }
-        },
-        {
-          label: 'Favoritar Página',
-          accelerator: 'CmdOrCtrl+D',
-          click() {
-            addFavorite();
-          }
-        },
-        {
-          label: 'Favoritos',
-          submenu: favorites.map((favorite) => {
-            return {
-              label: favorite.title,
-              click() {
-                mainWindow.loadURL(favorite.url);
-              }
-            };
-          })
-        },
-        {
           label: 'Guia de Atalhos',
           click() {
             showShortcutsPopup();
@@ -115,32 +90,6 @@ function clearCookies() {
   });
 }
 
-function goToURL() {
-  dialog.showMessageBox(mainWindow, {
-    title: 'Ir para URL',
-    message: 'Por favor, insira a URL desejada:',
-    inputPlaceholder: 'https://duckduckgo.com',
-    type: 'question',
-    buttons: ['Cancelar', 'Ir']
-  }).then((result) => {
-    if (!result.canceled) {
-      const url = result.inputValue.trim();
-      if (url !== '') {
-        mainWindow.loadURL(url);
-      }
-    }
-  }).catch((err) => {
-    console.log(err);
-  });
-}
-
-function addFavorite() {
-  const currentUrl = mainWindow.webContents.getURL();
-  const currentTitle = mainWindow.getTitle();
-  favorites.push({ url: currentUrl, title: currentTitle });
-  mainWindow.webContents.send('update-favorites', favorites);
-}
-
 function showShortcutsPopup() {
   const shortcutsText = `
     Atalhos do Navegador:
@@ -149,10 +98,8 @@ function showShortcutsPopup() {
     - Recarregar: CmdOrCtrl+R
     - Home: CmdOrCtrl+H
     - Limpar Cookies: CmdOrCtrl+Shift+C
-    - Ir para URL: CmdOrCtrl+U
-    - Favoritar Página: CmdOrCtrl+D
   `;
-  
+
   shortcutsPopup = new BrowserWindow({
     parent: mainWindow,
     width: 400,
@@ -180,4 +127,7 @@ function showShortcutsPopup() {
     </html>`
   );
 
-  shortcutsPopup.once
+  shortcutsPopup.once('ready-to-show', () => {
+    shortcutsPopup.show();
+  });
+}
