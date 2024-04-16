@@ -8,7 +8,7 @@
 ## Build
 ### Requisitos:
 
-* Ter o npm, electron e electron-build instalados na minha máquina
+* Ter o npm, electron e electron-build instalados na sua máquina
 
 ### Como buildar
 
