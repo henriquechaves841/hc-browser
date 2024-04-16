@@ -13,7 +13,7 @@ app.on('ready', () => {
     }
   });
 
-  const urlToMirror = 'https://example.com';
+  const urlToMirror = 'https://duckduckgo.com';
 
   mainWindow.loadURL(urlToMirror);
 
@@ -94,7 +94,7 @@ function goToURL() {
   dialog.showMessageBox(mainWindow, {
     title: 'Ir para URL',
     message: 'Por favor, insira a URL desejada:',
-    inputPlaceholder: 'https://example.com',
+    inputPlaceholder: 'https://duckduckgo.com',
     type: 'question',
     buttons: ['Cancelar', 'Ir']
   }).then((result) => {
