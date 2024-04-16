@@ -1,0 +1,32 @@
+{
+  "name": "hc-browser",
+  "version": "1.0.0",
+  "description": "Um navegador sem telemetria e coleta de dados, a mais pura dose de privacidade online",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "author": "mr.faraday841",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^16.0.0",
+    "electron-builder": "^22.11.7"
+  },
+  "build": {
+    "appId": "com.hc841.hcbrowser",
+    "productName": "HCBrowser",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}
