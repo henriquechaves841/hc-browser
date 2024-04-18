@@ -6,6 +6,11 @@ let mainWindow;
 let shortcutsPopup;
 
 app.on('ready', () => {
+  // Definir o DNS público da AdGuard
+  session.defaultSession.resolveProxy = (url, callback) => {
+    callback('PROXY 94.140.14.14:853; PROXY 94.140.15.15:853; DIRECT');
+  };
+
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
